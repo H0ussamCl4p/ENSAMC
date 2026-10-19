@@ -1,0 +1,43 @@
+/* Vault palette, matched to Flow (flow.hclap.tech) */
+:root,
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #560261;
+  --md-primary-fg-color--light: #7a1f86;
+  --md-primary-fg-color--dark: #3a0141;
+  --md-accent-fg-color: #8e2a9c;
+  --md-typeset-a-color: #560261;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #3a0141;
+  --md-primary-fg-color--light: #560261;
+  --md-primary-fg-color--dark: #26002b;
+  --md-accent-fg-color: #d9a6e1;
+  --md-typeset-a-color: #d9a6e1;
+}
+
+.vault-hero {
+  padding: 1.5rem 0 0.5rem;
+}
+
+.vault-hero h1 {
+  font-weight: 700;
+  color: var(--md-default-fg-color);
+  margin-bottom: 0.3rem;
+}
+
+.vault-hero p {
+  font-size: 1.05rem;
+  max-width: 40rem;
+}
+
+.vault-tag {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--md-primary-fg-color);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}

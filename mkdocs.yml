@@ -1,0 +1,80 @@
+site_name: Vault
+site_description: Course notes, exercises and solutions shared by Ensamien Parrainage.
+site_url: https://vault.hclap.tech/
+repo_url: https://github.com/H0ussamCl4p/ENSAMC
+repo_name: H0ussamCl4p/ENSAMC
+edit_uri: edit/main/
+copyright: Vault by Ensamien Parrainage
+
+# The repo root is the content. scripts/prepare_site.py copies it into _vault_src before the build.
+docs_dir: _vault_src
+site_dir: _site
+
+theme:
+  name: material
+  language: fr
+  font:
+    text: Inter
+    code: JetBrains Mono
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Mode sombre
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Mode clair
+  icon:
+    logo: material/safe-square-outline
+    repo: fontawesome/brands/github
+  favicon: assets/favicon.svg
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+extra_css:
+  - assets/vault.css
+
+plugins:
+  - search:
+      lang: [fr, en]
+  - mkdocs-jupyter:
+      execute: false
+      include_source: true
+      include: ["*.ipynb"]
+
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/ensamien-parrainage/posts/
+      name: Ensamien Parrainage
+    - icon: fontawesome/brands/github
+      link: https://github.com/H0ussamCl4p/ENSAMC
+
+validation:
+  links:
+    unrecognized_links: ignore
