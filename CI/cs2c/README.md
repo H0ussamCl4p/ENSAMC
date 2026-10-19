@@ -10,3 +10,6 @@ Modules du S1 :
 - Structure de données et algorithmique avancée : [cours et exercices](s1/structures-donnees-algo-avancee/)
 - Langues étrangères
 - Algorithmique et programmation en Python : [Python pour tous](../tronc-commun-1a/python-pour-tous/)
+
+Modules du S2 :
+- Introduction à la cryptographie appliquée : [TP1 à TP4](s2/cryptographie/)
