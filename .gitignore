@@ -1,0 +1,25 @@
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+.obsidian/
+
+# Binaires compilés (C)
+*.exe
+*.o
+*.out
+a.out
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# Futur site (Hugo / autres générateurs)
+public/
+resources/_gen/
+.hugo_build.lock
+node_modules/
