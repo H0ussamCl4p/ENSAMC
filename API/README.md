@@ -4,6 +4,6 @@ Deux années préparatoires intégrées ([fiche officielle](https://www.ensam-ca
 
 - Avant API1 : [maths pour préparer la prépa](avant-api1/)
 - API1 : [algorithmique](api1/algorithmique/), [programmation C](api1/programmation-c/)
-- API2 : [analyse numérique](api2/analyse-numerique/), [MATLAB](api2/matlab/notes-tp2.md)
+- API2 : [analyse numérique](api2/analyse-numerique/), [MATLAB](api2/matlab/)
 
 Python était en API2, il est maintenant en 1ère année du cycle ingénieur : [Python pour tous](../CI/tronc-commun-1a/python-pour-tous/).
