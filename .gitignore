@@ -25,6 +25,5 @@ resources/_gen/
 node_modules/
 
 # Site build (Vault)
-_vault_src/
 _site/
 .claude/
