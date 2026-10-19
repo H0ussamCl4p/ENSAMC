@@ -1,5 +1,3 @@
 # Master
 
-- [ti](ti/) : Technologies Immersives
-- [bdio](bdio/) : Big Data et Internet des Objets
-- [idms](idms/) : Ingénierie Digitale pour les Métiers de la Santé
+Pas encore de ressources pour les masters TI (Technologies Immersives), BDIO (Big Data et Internet des Objets) et IDMS (Ingénierie Digitale pour les Métiers de la Santé).

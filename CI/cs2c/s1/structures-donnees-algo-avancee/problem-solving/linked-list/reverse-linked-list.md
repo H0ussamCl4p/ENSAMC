@@ -1,4 +1,11 @@
-# Reversed Linked List Problem ( easy )
+---
+title: "Reverse linked list"
+date: 2025-10-01
+author: CHOUBIK Houssam
+tags: [dsa, linked-list, cs2c]
+---
+
+# Reverse linked list
 
 ## Problem Description
 

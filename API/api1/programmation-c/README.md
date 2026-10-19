@@ -1,9 +1,7 @@
-# Programmation C
+# Programmation C (API1)
 
-Corrections des TP 1, 2, 4 et 5 (le TP3 manque). L'énoncé du TP4 est [ici](tp4/tp4-enonce.pdf).
-
-Pour compiler :
+Corrections des TP1, TP2, TP4 et TP5 dans [tp/](tp/). L'énoncé du TP4 est [ici](tp/tp4/enonce.pdf). Le TP3 manque.
 
 ```bash
-gcc tp1/tp1-ex1.c -o ex1
+gcc tp/tp1/tp1-ex1.c -o ex1
 ```

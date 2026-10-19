@@ -1,52 +1,23 @@
 ---
-title: Python Notes
+title: "Python pour tous"
 date: 2025-04-27
 author: CHOUBIK Houssam
-draft: false
-tags:
-  - Python
-  - ENSAMC
+tags: [python]
 ---
 
+# Python pour tous
 
-# Python - Course Notes
+Notes du module Python. Je l'ai suivi en API2 (S4) avec M. El Omari Achraf, il est maintenant en 1ère année du cycle ingénieur pour toutes les filières.
 
-## General Info
-- **Instructor**: Mr El Omari Achraf 
-- **Semester**: 4  
-- **Course Link**: [Link to course material](https://app.ensamien.com/cours/programmation-python/docs/cSRzZceUG1DlqbZANMki)  
-- **Course Description**:  
-  A comprehensive introduction to Python programming, covering basic to advanced topics, with a focus on practical applications in labs and projects.
+Support du cours sur [ensamien](https://app.ensamien.com/cours/programmation-python/docs/cSRzZceUG1DlqbZANMki).
 
----
+## Séances
 
-## Week-by-Week Lectures
-### Week 1: Introduction to Python  
-- **Topics Covered**: TP1 & TP2 (Introduction to Python, Variables, Data Types)
-- **Summary**: 
-- [Link to Week 1 Notes](01-semaine1-tp1-tp2.md)  
-  - Brief overview of Python syntax, basic data types (strings, integers, etc.), and operations.
-### Week 2:  Python  scripts
-- **Topics Covered**: TP3
-- **Summary**:  
-- [Link to Week 2 Notes](02-semaine2-tp3.md)  
----
+- [TP1 et TP2](01-tp1-tp2.md) : lancer Python, Google Colab, variables, opérateurs
+- [TP3](02-tp3.md) : fonctions, portée des variables, menu avec `match`, distributeur de billets
+- [Installer NumPy](numpy-installation.md)
 
-## Libraries
-- **Numpy Library** : Check this documentation :
-- [Link to the Numpy Documentation](numpy-installation.md)  
+## Liens utiles
 
-### Key Concepts to Remember
-- **Concept 1**: Understanding Python syntax, data types, and operations.
-- **Concept 2**: Mastery of loops, functions, and problem-solving techniques.
-
----
-
-## Additional Resources
-- **Official Python Documentation**: [Link to Python Docs](https://docs.python.org)
-- **Online Courses**: [Python for Beginners](https://www.w3schools.com/python/)
-
----
-
-**By Choubik Houssam**
-
+- [Documentation officielle](https://docs.python.org/fr/3/)
+- [W3Schools Python](https://www.w3schools.com/python/)
