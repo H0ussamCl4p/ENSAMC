@@ -9,6 +9,7 @@ Modules du S1 :
 - Outils mathématiques d'aide à la décision
 - Structure de données et algorithmique avancée : [cours et exercices](s1/structures-donnees-algo-avancee/)
 - Langues étrangères
+- Statistique inférentielle : [scripts R](s1/statistique-inferentielle/)
 - Algorithmique et programmation en Python : [Python pour tous](../tronc-commun-1a/python-pour-tous/)
 
 Modules du S2 :

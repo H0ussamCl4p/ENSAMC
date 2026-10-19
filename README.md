@@ -22,6 +22,7 @@ Chaque module suit la même forme : `cours/`, `td/`, `tp/`, `projet/`.
 | CI 1A, toutes filières | [Python pour tous](CI/tronc-commun-1a/python-pour-tous/) |
 | CI CS2C, S1 | [Structures de données et algorithmique avancée](CI/cs2c/s1/structures-donnees-algo-avancee/) |
 | CI CS2C, S1 | [Ingénierie des systèmes d'information (SQL)](CI/cs2c/s1/ingenierie-systemes-information/) |
+| CI CS2C, S1 | [Statistique inférentielle (R)](CI/cs2c/s1/statistique-inferentielle/) |
 | CI CS2C, S2 | [Cryptographie appliquée](CI/cs2c/s2/cryptographie/) |
 
 Les autres filières et les masters n'ont rien pour l'instant. Pour ajouter vos ressources, voir [CONTRIBUTING.md](CONTRIBUTING.md).
