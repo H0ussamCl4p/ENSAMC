@@ -14,6 +14,7 @@ Chaque module suit la même forme : `cours/`, `td/`, `tp/`, `projet/`.
 
 | Niveau | Module |
 |---|---|
+| Avant API1 | [Maths du lycée à la prépa](API/avant-api1/) |
 | API1 | [Algorithmique](API/api1/algorithmique/) |
 | API1 | [Programmation C](API/api1/programmation-c/) |
 | API2 | [Analyse numérique](API/api2/analyse-numerique/) |
