@@ -1,0 +1,5 @@
+Ahmed:21:M:3:Benimellal
+Salma:22:F:4:Azro
+Nawal:21:F:4:Meknes
+Nabil:20:M:2:Ifran
+Youssef:23:M:5:Tantan
