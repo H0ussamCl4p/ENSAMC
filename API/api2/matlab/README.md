@@ -1,5 +1,7 @@
 # MATLAB (API2)
 
+> Ce module n'est plus au programme. Les ressources sont gardées pour ceux que ça intéresse.
+
 - [Notes de TP](notes.md) : vecteurs et matrices (TP2), affichage (TP3), polynômes et fractions rationnelles (TP8)
 
 ## Énoncés des TP

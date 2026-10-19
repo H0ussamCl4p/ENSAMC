@@ -18,7 +18,7 @@ Chaque module suit la même forme : `cours/`, `td/`, `tp/`, `projet/`.
 | API1 | [Algorithmique](API/api1/algorithmique/) |
 | API1 | [Programmation C](API/api1/programmation-c/) |
 | API2 | [Analyse numérique](API/api2/analyse-numerique/) |
-| API2 | [MATLAB](API/api2/matlab/) |
+| API2 | [MATLAB](API/api2/matlab/) (plus au programme) |
 | CI 1A, toutes filières | [Python pour tous](CI/tronc-commun-1a/python-pour-tous/) |
 | CI CS2C, S1 | [Structures de données et algorithmique avancée](CI/cs2c/s1/structures-donnees-algo-avancee/) |
 | CI CS2C, S1 | [Ingénierie des systèmes d'information (SQL)](CI/cs2c/s1/ingenierie-systemes-information/) |
