@@ -338,7 +338,7 @@ def sidebar(tree, page_url, current_rel):
 {''.join(groups)}
 <div class="sidebar-foot">
 <a class="side-link subtle" href="{contrib}">{icon('users')}<span>Contribute</span></a>
-<a class="side-link subtle" href="{REPO_URL}" rel="noopener">{icon('star')}<span>Star on GitHub</span><span class="star-count" data-stars hidden></span></a>
+<a class="side-link subtle star-btn" href="{REPO_URL}" target="_blank" rel="noopener">{icon('star')}<span>Star on GitHub</span><span class="star-count" data-stars hidden></span></a>
 </div>
 </aside>"""
 
@@ -398,7 +398,7 @@ def layout(tree, page_url, rel, title, body, description="", head_extra=""):
 <nav class="crumb" aria-label="Breadcrumb">{crumbs(page_url, rel, title)}</nav>
 <div class="topbar-right">
 <button class="btn ghost icon-btn" type="button" data-search aria-label="Search">{icon('search')}</button>
-<a class="btn outline star-btn" href="{REPO_URL}" rel="noopener" aria-label="Star Vault on GitHub">{icon('star')}<span>Star</span><span class="star-count" data-stars hidden></span></a>
+<a class="btn outline star-btn" href="{REPO_URL}" target="_blank" rel="noopener" aria-label="Star Vault on GitHub">{icon('star')}<span>Star</span><span class="star-count" data-stars hidden></span></a>
 <a class="btn soft wide-only" href="{LINKEDIN}" rel="noopener">Ensamien Parrainage</a>
 </div>
 </header>

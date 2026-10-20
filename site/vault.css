@@ -268,8 +268,8 @@ body.menu-open{overflow:hidden}
 .nb-cell,.nb-md,.code-card,.prose pre{content-visibility:auto;contain-intrinsic-size:auto 160px}
 
 /* GitHub star button with the live count */
-.star-btn{min-height:36px;padding:7px 12px;font-size:.85rem}
-.star-btn .icon{width:16px;height:16px}
+.btn.star-btn{min-height:36px;padding:7px 12px;font-size:.85rem}
+.btn.star-btn .icon{width:16px;height:16px}
 .star-count{display:inline-flex;align-items:center;min-height:18px;padding:0 6px;border-radius:var(--r-xs);background:var(--tag-gray);color:var(--tag-gray-ink);font-size:.72rem;font-weight:600;font-variant-numeric:tabular-nums}
 .star-count[hidden]{display:none}
 .side-link .star-count{margin-left:auto}
