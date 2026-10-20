@@ -1,4 +1,10 @@
-# Réseaux informatiques et cybersécurité (CS2C, S1)
+---
+title: "Réseaux informatiques et cybersécurité"
+---
+
+# Réseaux informatiques et cybersécurité (S1)
+
+Module du S1 de CS2C et d'IAGI (« Réseaux informatique et cybersécurité »).
 
 ## Réseaux
 

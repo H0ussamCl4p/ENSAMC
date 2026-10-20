@@ -1,4 +1,10 @@
-# Introduction à la cryptographie appliquée (CS2C, S2)
+---
+title: "Cryptographie"
+---
+
+# Cryptographie (CS2C, S2)
+
+Module du S2 de CS2C.
 
 TP en Python (notebooks Jupyter). Chaque dossier contient l'énoncé et la correction.
 

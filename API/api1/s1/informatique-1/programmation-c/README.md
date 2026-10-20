@@ -1,4 +1,8 @@
-# Programmation C (API1)
+---
+title: "Programmation C"
+---
+
+# Programmation C (Informatique 1, API1)
 
 Pour compiler un fichier : `gcc fichier.c -o prog` (ajouter `-lm` si le programme utilise `math.h`).
 

@@ -1,4 +1,10 @@
-# Structures de données et algorithmique avancée (CS2C, S1)
+---
+title: "Structure de données et Algorithmique Avancée"
+---
+
+# Structure de données et Algorithmique Avancée (S1)
+
+Module du S1 de CS2C. IAGI a un module proche : « Algorithmique avancée ».
 
 Tout est en C. Pour compiler un fichier : `gcc fichier.c -o prog`.
 

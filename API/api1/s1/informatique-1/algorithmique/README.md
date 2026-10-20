@@ -1,4 +1,8 @@
-# Algorithmique (API1)
+---
+title: "Algorithmique"
+---
+
+# Algorithmique (Informatique 1, API1)
 
 - Cours : [les fonctions](cours/fonctions.md)
 - TD1 pseudo-code : [énoncé](td/td1/enonce.pdf), [correction](td/td1/correction.md), [correction manuscrite (PDF)](td/td1/correction-manuscrite.pdf), [exercices supplémentaires](td/td1/exercices-supplementaires.md)

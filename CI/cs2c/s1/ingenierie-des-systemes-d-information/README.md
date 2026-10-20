@@ -1,6 +1,11 @@
-# Ingénierie des systèmes d'information (CS2C et IAGI, S1)
+---
+title: "Ingénierie des Systèmes d'Information"
+---
 
-Module commun aux filières CS2C et IAGI.
+# Ingénierie des Systèmes d'Information (S1)
+
+Module commun du S1 : « Ingénierie des Systèmes d'Information » en CS2C, « Système d'information et Bases de Données » en IAGI.
+
 
 | Fichier | Contenu |
 |---|---|

@@ -41,7 +41,11 @@ DRIVES_PAGE = "drives.html"
 # Sidebar labels for the cycles, and the names shown on the level boxes of folder pages.
 CYCLES = {"API": "Integrated prep cycle", "CI": "Engineering cycle", "Master": "Master's"}
 LEVELS = {"avant-api1": "Get ready for prépa", "api1": "Prep year 1", "api2": "Prep year 2",
-          "tronc-commun-1a": "All programs, year 1", "cs2c": "Cybersecurity and Cloud Computing"}
+          "tronc-commun": "Modules communs à toutes les filières", "cs2c": "Cybersécurité et Cloud Computing",
+          "iagi": "Intelligence Artificielle et Génie Informatique", "gsi": "Génie des Systèmes Industriels",
+          "gsmi": "Génie des Systèmes Mécaniques Industriels", "gem": "Génie Électromécanique",
+          "gm2a": "Génie Mécatronique pour l'Automobile et l'Aéronautique",
+          "msei": "Management des Systèmes Électriques Intelligents"}
 DRIVES = [("API1", "2026-2027", "1agpbin9asgD10WXHt4Agk_-0C27z8CY-"),
           ("API2", "2026-2027", "13TV1AZulLeBDfWJQB11-BYGQg9lmQzL9"),
           ("GSI", "2025-2026", "186BMD4eDyG8JPjyYd6-sNqbF8_W_XPgL"),
@@ -53,18 +57,15 @@ KIND = {".pdf": ("PDF", "red"), ".png": ("Image", "blue"), ".jpg": ("Image", "bl
 IGNORE = {"__pycache__", ".ipynb_checkpoints"}
 ACRONYMS = {"api": "API", "api1": "API1", "api2": "API2", "ci": "CI", "cs2c": "CS2C", "iagi": "IAGI", "gsi": "GSI",
             "gsmi": "GSMI", "gem": "GEM", "gmaa": "GM2A", "msei": "MSEI", "ti": "TI", "bdio": "BDIO", "idms": "IDMS",
-            "s1": "S1", "s2": "S2", "td": "TD", "tp": "TP", "tdp": "TDP", "sql": "SQL", "dsa": "DSA", "c": "C",
+            "s1": "S1", "s2": "S2", "s3": "S3", "s4": "S4", "s5": "S5", "gm2a": "GM2A", "td": "TD", "tp": "TP", "tdp": "TDP", "sql": "SQL", "dsa": "DSA", "c": "C",
             "matlab": "MATLAB", "leetcode": "LeetCode"}
-NAMES = {"avant-api1": "Before API1", "tronc-commun-1a": "Common first year", "programmation-c": "C programming",
-         "algorithmique": "Algorithms", "analyse-numerique": "Numerical analysis", "python-pour-tous": "Python pour tous",
-         "structures-donnees-algo-avancee": "Data structures", "ingenierie-systemes-information": "Information systems",
-         "programmation-python": "Python programming", "statistique-inferentielle": "Inferential statistics",
-         "cryptographie": "Cryptography", "problem-solving": "Problem solving", "hassan-el-bahi": "Hassan El Bahi",
+NAMES = {"avant-api1": "Before API1", "tronc-commun": "Tronc commun", "programmation-c": "Programmation C",
+         "algorithmique": "Algorithmique", "analyse-numerique": "Analyse numérique",
+         "cryptographie": "Cryptographie", "problem-solving": "Problem solving", "hassan-el-bahi": "Hassan El Bahi",
          "chaines-fichiers": "Strings and files", "exercices": "Exercises", "examens": "Exams", "exam-tp": "Lab exam",
          "cours": "Lessons", "projet": "Project", "bases": "Basics", "tableaux": "Arrays", "structures": "Structures",
          "maths": "Maths", "notes-cours": "Notes", "basic-programming": "Basic programming", "input-output": "Input / output",
-         "linked-list": "Linked list", "trees": "Trees", "array": "Array",
-         "reseaux-informatiques": "Computer networks", "linux": "Linux", "orientation-filieres": "Choosing a program",
+         "linked-list": "Linked list", "trees": "Trees", "array": "Array", "orientation-filieres": "Choosing a program",
          "fiche-r": "R cheat sheet", "examen-blanc": "Mock exam", "resume-linux": "Linux summary",
          "fiche-scripts-shell": "Shell scripts cheat sheet"}
 
@@ -163,6 +164,9 @@ class Node:
         self.url = (self.rel + "/index.html") if is_dir else url_of(rel)
 
 
+TITLES = {}  # folder path -> shown name, for the breadcrumb
+
+
 def scan(rel=""):
     node = Node(rel, True)
     full = os.path.join(ROOT, rel)
@@ -174,7 +178,13 @@ def scan(rel=""):
             continue
         child_rel = os.path.join(rel, name) if rel else name
         if os.path.isdir(os.path.join(ROOT, child_rel)):
-            node.children.append(scan(child_rel))
+            child = scan(child_rel)
+            # A module's README can give its official name: `title:` in its front matter.
+            readme = os.path.join(ROOT, child_rel, "README.md")
+            if os.path.exists(readme):
+                child.title = front_matter(read(readme))[0].get("title") or child.title
+            TITLES[child.rel] = child.title
+            node.children.append(child)
         else:
             node.children.append(Node(child_rel, False))
     return node
@@ -390,7 +400,7 @@ def crumbs(page_url, rel, title):
         if i == len(parts) - 1:
             links.append(f"<span>{esc(title)}</span>")
         elif os.path.isdir(os.path.join(ROOT, acc)):
-            links.append(f'<a href="{rel_link(page_url, acc + "/index.html")}">{esc(nice(p))}</a>')
+            links.append(f'<a href="{rel_link(page_url, acc + "/index.html")}">{esc(TITLES.get(acc, nice(p)))}</a>')
     return '<span class="sep">/</span>'.join(links)
 
 

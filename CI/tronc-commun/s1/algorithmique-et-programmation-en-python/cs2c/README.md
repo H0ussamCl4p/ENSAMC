@@ -1,4 +1,8 @@
-# Algorithmique et programmation en Python (CS2C, S1)
+---
+title: "Cours et TDP de CS2C"
+---
+
+# Algorithmique et programmation en Python : cours et TDP de CS2C
 
 Cours et TDP en notebooks Jupyter.
 

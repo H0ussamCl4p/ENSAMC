@@ -1,6 +1,10 @@
+---
+title: "Python pour tous"
+---
+
 # Python pour tous
 
-Module de 1ère année du cycle ingénieur, commun à toutes les filières (avant, il était en API2).
+Partie du module « Algorithmique et programmation en Python », commun à toutes les filières en 1ère année du cycle ingénieur (avant, il était en API2).
 
 ## Cours
 - [Support de cours (PDF)](cours/support-cours.pdf), Pr. El Omari et Pr. Serrar

@@ -2,14 +2,16 @@
 
 ## Où mettre un fichier
 
-`<cycle>/<filière>/<semestre>/<module>/<type>/`
+`<cycle>/<niveau ou filière>/<semestre>/<module>/<sous-module>/<type>/`
 
 - cycle : `API`, `CI`, `Master`
-- filière : `api1`, `api2`, `tronc-commun-1a`, `cs2c`, `iagi`... (créer le dossier quand il y a du contenu)
-- semestre : `s1`, `s2`... (on peut s'en passer si le module dure toute l'année)
+- niveau ou filière : `api1`, `api2`, `cs2c`, `iagi`, `gsi`..., ou `tronc-commun` pour un module suivi par toutes les filières
+- semestre : `s1`, `s2`... comme dans le programme officiel (en API : S1 et S2 en API1, S3 et S4 en API2)
+- module : le nom officiel du module sur [ensam-casa.ma](https://www.ensam-casa.ma/), en minuscules sans accents, par exemple `systeme-d-exploitation-linux` ; mettre le nom exact dans le `title:` du `README.md` du module
+- sous-module : quand un module en regroupe plusieurs, par exemple `informatique-1/algorithmique`
 - type : `cours`, `td/tdN`, `tp/tpN`, `projet`, `assets` pour les images
 
-Si un module est commun à plusieurs filières, il va dans `tronc-commun-1a`.
+Un module commun à toutes les filières va dans `tronc-commun`. Un module partagé par quelques filières reste dans le dossier d'une filière, et les pages des autres filières le mettent en lien.
 
 ## Noms de fichiers
 

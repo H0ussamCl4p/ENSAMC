@@ -25,34 +25,32 @@ More documents (slides, past exams, scanned notes) are on our Google Drives:
 ## Structure
 
 ```
-API/      integrated preparatory cycle (api1, api2)
-CI/       engineering cycle (common first year, then one folder per program)
+API/      integrated preparatory cycle: api1 (S1, S2), api2 (S3, S4)
+CI/       engineering cycle: one folder per program (cs2c, iagi, gsi...) and tronc-commun for shared modules
 Master/   master's programs
 ```
 
-Inside each module: `cours/` (lessons), `td/` (tutorials), `tp/` (lab work), `exercices/` and `projet/`. Files are mostly in French, like the courses.
+Folders follow the official program of each cycle and program: `<cycle>/<level or program>/<semester>/<module>/`, with the module names used by the school. Inside a module: `cours/` (lessons), `td/` (tutorials), `tp/` (lab work), `exercices/` and `projet/`. Files are mostly in French, like the courses.
+
+Each program has a page listing its full official program, semester by semester, with a link on every module that has resources here. Modules shared by several programs live in one place and are linked from every program that follows them.
 
 ## What's inside
 
 | Level | Module |
 |---|---|
 | Before API1 | [Maths: from high school to prépa](API/avant-api1/) |
-| API1 | [Algorithms](API/api1/algorithmique/) |
-| API1 | [C programming](API/api1/programmation-c/) |
-| API2 | [Numerical analysis](API/api2/analyse-numerique/) |
+| API1, S1 | [Informatique 1](API/api1/s1/informatique-1/): algorithms and C programming |
+| API2, S4 | [Analyse Numérique et Probabilités](API/api2/s4/analyse-numerique-et-probabilites/) |
 | API2 | [MATLAB](API/api2/matlab/) (no longer in the program) |
-| CI year 1, all programs | [Python pour tous](CI/tronc-commun-1a/python-pour-tous/) |
-| CI CS2C, S1 | [Computer networks](CI/cs2c/s1/reseaux-informatiques/) |
-| CI CS2C, S1 | [Linux](CI/cs2c/s1/linux/) |
-| CI CS2C, S1 | [Data structures and advanced algorithms](CI/cs2c/s1/structures-donnees-algo-avancee/) |
-| CI CS2C, S1 | [Information systems (SQL)](CI/cs2c/s1/ingenierie-systemes-information/) |
-| CI CS2C, S1 | [Python programming](CI/cs2c/s1/programmation-python/) |
-| CI CS2C, S1 | [Inferential statistics (R)](CI/cs2c/s1/statistique-inferentielle/) |
-| CI CS2C, S2 | [Applied cryptography](CI/cs2c/s2/cryptographie/) |
+| CI S1, all programs | [Algorithmique et programmation en Python](CI/tronc-commun/s1/algorithmique-et-programmation-en-python/) |
+| CI CS2C (and IAGI), S1 | [Réseaux informatiques et cybersécurité](CI/cs2c/s1/reseaux-informatiques-et-cybersecurite/) |
+| CI CS2C, S1 | [Système d'exploitation Linux](CI/cs2c/s1/systeme-d-exploitation-linux/) |
+| CI CS2C and IAGI, S1 | [Ingénierie des Systèmes d'Information](CI/cs2c/s1/ingenierie-des-systemes-d-information/) |
+| CI CS2C, S1 | [Outils Mathématiques d'aide à la décision](CI/cs2c/s1/outils-mathematiques-d-aide-a-la-decision/): inferential statistics with R |
+| CI CS2C, S1 | [Structure de données et Algorithmique Avancée](CI/cs2c/s1/structure-de-donnees-et-algorithmique-avancee/) |
+| CI CS2C, S2 | [Cryptographie](CI/cs2c/s2/cryptographie/) |
 
-Choosing a program after API2? Read the [orientation guide](CI/orientation-filieres.md) (in French).
-
-The other programs and the master's are empty for now. For GSI, GM2A and MSEI, check the drives above.
+Choosing a program after API2? Read the [orientation guide](CI/orientation-filieres.md) (in French). Every program's page is in [CI/](CI/). The master's is empty for now; for GSI, GM2A and MSEI, check the drives above.
 
 ## Contributing
 

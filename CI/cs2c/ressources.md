@@ -19,7 +19,7 @@ Cours et outils en ligne gratuits, rangés par sujet.
 - [Les piles et les files](https://sdz.tdct.org/sdz/les-piles-et-les-files-4.html) : tutoriel en C de l'ancien Site du Zéro (archive ; le navigateur peut signaler un certificat expiré).
 - [Les piles et les files en langage C](https://www.studocu.com/row/document/universite-de-sousse/commande-des-machines/les-piles-et-les-files-en-langage-c/17168376) : cours sur Studocu (inscription parfois demandée).
 - En anglais : [Queue in C](https://www.geeksforgeeks.org/c/queue-in-c/), [Queue data structure](https://www.geeksforgeeks.org/dsa/queue-data-structure/), [FIFO approach](https://www.geeksforgeeks.org/dsa/fifo-first-in-first-out-approach-in-programming/) et [FIFO vs LIFO](https://www.geeksforgeeks.org/dsa/fifo-vs-lifo-approach-in-programming/) (GeeksforGeeks), [LIFO vs FIFO in C](https://medium.com/@edwinsanjosoji/lifo-vs-fifo-mastering-stacks-and-queues-in-c-4cfc58b8b17a) (Medium), [queues in JavaScript](https://dev.to/gr8soln/understanding-queues-data-structure-mastering-fifo-principle-in-javascript-8di) (DEV).
-- Nos cours : [piles (LIFO)](s1/structures-donnees-algo-avancee/cours/03-piles-lifo.md) et [files (FIFO)](s1/structures-donnees-algo-avancee/cours/04-files-fifo.md).
+- Nos cours : [piles (LIFO)](s1/structure-de-donnees-et-algorithmique-avancee/cours/03-piles-lifo.md) et [files (FIFO)](s1/structure-de-donnees-et-algorithmique-avancee/cours/04-files-fifo.md).
 
 ## Systèmes d'information (Merise)
 

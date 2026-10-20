@@ -1,4 +1,8 @@
-# Statistique inférentielle avec R (CS2C, S1)
+---
+title: "Statistique inférentielle"
+---
+
+# Statistique inférentielle avec R (sous-module, S1)
 
 - [Fiche statistiques avec R](fiche-r.md) : toutes les commandes utiles, de l'import des données à la régression
 - [Examen blanc](examen-blanc.md) : statistique descriptive, données groupées et exercice R, avec corrigé
