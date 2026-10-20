@@ -21,5 +21,9 @@ Chaque fichier contient l'énoncé en commentaire et un `main` de test.
 - [ex2 : arbre binaire de recherche](examens/exam-tp/ex2-arbre-binaire-recherche.c) : taille, max, somme, hauteur minimale, feuilles
 - [ex3 : pile](examens/exam-tp/ex3-pile-expression-postfixee.c) : évaluation d'une expression postfixée
 
+## Pour aller plus loin : piles et files
+- [Les piles et les files](https://sdz.tdct.org/sdz/les-piles-et-les-files-4.html) : tutoriel en C de l'ancien Site du Zéro (archive ; le navigateur peut signaler un certificat expiré).
+- [Les piles et les files en langage C](https://www.studocu.com/row/document/universite-de-sousse/commande-des-machines/les-piles-et-les-files-en-langage-c/17168376) : cours sur Studocu (inscription parfois demandée).
+
 ## Problem solving
 Dans [problem-solving/](problem-solving/) : input-output, LeetCode (array, trees), reverse linked list. Les solutions LeetCode ne contiennent que la fonction, comme sur le site.
