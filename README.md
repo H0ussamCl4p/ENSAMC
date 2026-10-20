@@ -42,11 +42,15 @@ Inside each module: `cours/` (lessons), `td/` (tutorials), `tp/` (lab work), `ex
 | API2 | [Numerical analysis](API/api2/analyse-numerique/) |
 | API2 | [MATLAB](API/api2/matlab/) (no longer in the program) |
 | CI year 1, all programs | [Python pour tous](CI/tronc-commun-1a/python-pour-tous/) |
+| CI CS2C, S1 | [Computer networks](CI/cs2c/s1/reseaux-informatiques/) |
+| CI CS2C, S1 | [Linux](CI/cs2c/s1/linux/) |
 | CI CS2C, S1 | [Data structures and advanced algorithms](CI/cs2c/s1/structures-donnees-algo-avancee/) |
 | CI CS2C, S1 | [Information systems (SQL)](CI/cs2c/s1/ingenierie-systemes-information/) |
 | CI CS2C, S1 | [Python programming](CI/cs2c/s1/programmation-python/) |
 | CI CS2C, S1 | [Inferential statistics (R)](CI/cs2c/s1/statistique-inferentielle/) |
 | CI CS2C, S2 | [Applied cryptography](CI/cs2c/s2/cryptographie/) |
+
+Choosing a program after API2? Read the [orientation guide](CI/orientation-filieres.md) (in French).
 
 The other programs and the master's are empty for now. For GSI, GM2A and MSEI, check the drives above.
 

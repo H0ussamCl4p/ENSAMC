@@ -50,7 +50,10 @@ NAMES = {"avant-api1": "Before API1", "tronc-commun-1a": "Common first year", "p
          "chaines-fichiers": "Strings and files", "exercices": "Exercises", "examens": "Exams", "exam-tp": "Lab exam",
          "cours": "Lessons", "projet": "Project", "bases": "Basics", "tableaux": "Arrays", "structures": "Structures",
          "maths": "Maths", "notes-cours": "Notes", "basic-programming": "Basic programming", "input-output": "Input / output",
-         "linked-list": "Linked list", "trees": "Trees", "array": "Array"}
+         "linked-list": "Linked list", "trees": "Trees", "array": "Array",
+         "reseaux-informatiques": "Computer networks", "linux": "Linux", "orientation-filieres": "Choosing a program",
+         "fiche-r": "R cheat sheet", "examen-blanc": "Mock exam", "resume-linux": "Linux summary",
+         "fiche-scripts-shell": "Shell scripts cheat sheet"}
 
 FORMATTER = HtmlFormatter(nowrap=False, cssclass="hl-code", wrapcode=True)
 MD = markdown.Markdown(extensions=["fenced_code", "codehilite", "tables", "toc", "attr_list", "admonition", "sane_lists"],

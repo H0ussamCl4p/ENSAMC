@@ -6,4 +6,6 @@ Deux années préparatoires intégrées ([fiche officielle](https://www.ensam-ca
 - API1 : [algorithmique](api1/algorithmique/), [programmation C](api1/programmation-c/)
 - API2 : [analyse numérique](api2/analyse-numerique/), [MATLAB](api2/matlab/) (plus au programme)
 
+Fin d'API2 : le [guide d'orientation](../CI/orientation-filieres.md) aide à choisir sa filière.
+
 Python était en API2, il est maintenant en 1ère année du cycle ingénieur : [Python pour tous](../CI/tronc-commun-1a/python-pour-tous/).
