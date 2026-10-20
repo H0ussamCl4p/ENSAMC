@@ -268,7 +268,8 @@ body.menu-open{overflow:hidden}
 .cycle-head h3 span{margin-left:8px;color:var(--muted-foreground);font-size:.92rem;font-weight:500;letter-spacing:-.01em}
 .cycle-head a{flex:none;color:var(--primary);font-size:.88rem;font-weight:500;text-decoration:none}
 .cycle-head a:hover{text-decoration:underline}
-.cycle>.muted{margin:4px 0 14px}
+.cycle-head{margin-bottom:12px}
+.note-line{margin:0 0 8px;text-align:center}
 .cycle-note{display:flex;align-items:center;gap:10px;margin:0 0 12px;padding:10px 14px;border-radius:var(--r-md);background:var(--primary-soft);color:var(--text);font-size:.9rem;text-decoration:none}
 .cycle-note:hover{background:var(--primary-soft-strong)}
 .cycle-note .icon{color:var(--primary)}

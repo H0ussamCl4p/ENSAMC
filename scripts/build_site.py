@@ -38,9 +38,7 @@ FLOW_URL = "https://flow.hclap.tech/"
 ORIENTATION = "CI/orientation-filieres.html"
 
 # Home page boxes: what each cycle and level is, and the programs that have no content yet.
-CYCLES = {"API": ("Integrated prep cycle", "Two years of prépa before choosing a program."),
-          "CI": ("Engineering cycle", "Three years in one of the seven programs."),
-          "Master": ("Master's", "Master's programs.")}
+CYCLES = {"API": "Integrated prep cycle", "CI": "Engineering cycle", "Master": "Master's"}
 LEVELS = {"avant-api1": "Get ready for prépa", "api1": "Prep year 1", "api2": "Prep year 2",
           "tronc-commun-1a": "All programs, year 1", "cs2c": "Cybersecurity and Cloud Computing"}
 PROGRAMS = [("GSI", "Industrial systems"), ("GSMI", "Mechanical systems"), ("GEM", "Electromechanics"),
@@ -333,7 +331,7 @@ def sidebar(tree, page_url, current_rel):
             continue
         active = " active" if current_rel == sec.rel or current_rel.startswith(sec.rel + "/") else ""
         links.append(f'<a class="side-link{active}" href="{rel_link(page_url, sec.url)}">{icon("folder")}'
-                     f'<span>{esc(sec.title)}</span><small>{esc(CYCLES[sec.rel][0])}</small></a>')
+                     f'<span>{esc(sec.title)}</span><small>{esc(CYCLES[sec.rel])}</small></a>')
     guide = " active" if page_url == ORIENTATION else ""
     groups = [f'<div class="side-label">Browse</div>{"".join(links)}',
               f'<div class="side-label">Guides</div><a class="side-link{guide}" href="{rel_link(page_url, ORIENTATION)}">'
@@ -518,7 +516,7 @@ def empty_box(code, name):
     action = (f'<a href="https://drive.google.com/drive/folders/{drive}?usp=drive_link" rel="noopener">{icon("drive")}Shared drive</a>'
               if drive else "<span>Coming soon</span>")
     return (f'<section class="box empty"><div class="box-head"><span class="tag">{esc(code)}</span><b>{esc(name)}</b>'
-            f'<small>Nothing in Vault yet</small></div><div class="box-empty">{action}</div></section>')
+            f'</div><div class="box-empty">{action}</div></section>')
 
 
 def folder_boxes(node, page_url):
@@ -664,24 +662,24 @@ def build_home(tree):
 
     cycles = []
     for sec in tree.children:
-        name, blurb = CYCLES[sec.rel]
+        name = CYCLES[sec.rel]
         boxes = [level_box(c, page_url) for c in sec.children if c.is_dir]
         if sec.rel == "CI":
             boxes += [empty_box(code, label) for code, label in PROGRAMS]
         if not boxes:
             boxes.append(empty_box("Master", "Master's programs"))
-        guide = (f'<a class="cycle-note" href="{ORIENTATION}">{icon("doc")}<span><b>Finishing API2?</b> '
-                 f'Read the guide to choosing a program.</span></a>' if sec.rel == "CI" else "")
+        guide = (f'<a class="cycle-note" href="{ORIENTATION}">{icon("doc")}<span><b>Choosing a program?</b> Read the guide</span></a>'
+                 if sec.rel == "CI" else "")
         cycles.append(f'<div class="cycle" id="cycle-{sec.rel.lower()}"><div class="cycle-head"><h3>{esc(sec.title)}'
                       f'<span>{esc(name)}</span></h3><a href="{rel_link(page_url, sec.url)}">Open</a></div>'
-                      f'<p class="muted">{esc(blurb)}</p>{guide}<div class="boxes">{"".join(boxes)}</div></div>')
+                      f'{guide}<div class="boxes">{"".join(boxes)}</div></div>')
     drv = "".join(f'<a class="mini-link" href="https://drive.google.com/drive/folders/{i}?usp=drive_link" rel="noopener">'
-                  f'{icon("drive")}<span><b>{esc(n)}</b> shared drive</span><span class="tag">{y}</span></a>' for n, y, i in DRIVES)
+                  f'{icon("drive")}<span><b>{esc(n)}</b></span><span class="tag">{y}</span></a>' for n, y, i in DRIVES)
     body = f"""
 <section class="home-hero">
 <span class="eyebrow">Ensamien Parrainage</span>
 <h1>Every course, <span class="hl"><i aria-hidden="true"></i>kept</span> in one vault.</h1>
-<p class="hero-lede">Course notes, exercises, lab work and solutions shared by students, for students. Sorted by cycle, program and module.</p>
+<p class="hero-lede">Notes, exercises and solutions, by students.</p>
 <div class="hero-actions">
 <button class="btn" type="button" data-search>{icon('search')}Search the vault</button>
 <a class="btn soft" href="#browse">Browse by cycle</a>
@@ -690,19 +688,16 @@ def build_home(tree):
 </section>
 <div class="stats">
 <div class="stat"><span class="stat-label">Files</span><span class="stat-value num">{counts['files']}</span></div>
-<div class="stat"><span class="stat-label">Code files</span><span class="stat-value num">{counts['code']}</span></div>
-<div class="stat"><span class="stat-label">Notes and notebooks</span><span class="stat-value num">{counts['notes'] + counts['nb']}</span></div>
+<div class="stat"><span class="stat-label">Code</span><span class="stat-value num">{counts['code']}</span></div>
+<div class="stat"><span class="stat-label">Notes</span><span class="stat-value num">{counts['notes'] + counts['nb']}</span></div>
 </div>
-<div class="notice-card"><h2>Student project</h2><p>Vault is not an official resource. Solutions are written by students, so double-check them with your teachers.</p></div>
+<p class="muted note-line">Student project, not official. Check solutions with your teachers.</p>
 <h2 class="list-title" id="browse">Browse by cycle</h2>
 {"".join(cycles)}
-<p class="muted">Files are mostly in French, like the courses.</p>
 <h2 class="list-title" id="drives">Shared drives</h2>
-<p class="muted">Slides, past exams and scanned notes for the programs not covered here yet.</p>
 <div class="drives">{drv}</div>
 <div class="card about">
 <h2>Ensamien Parrainage</h2>
-<p>Vault is part of Ensamien Parrainage, the mentoring program where older students help newer ones: course resources, advice and support through the first years.</p>
 <div class="about-actions">
 <a class="btn" href="{LINKEDIN}" rel="noopener">{icon('linkedin')}Follow on LinkedIn</a>
 <a class="btn soft" href="{FLOW_URL}" rel="noopener">Open Flow</a>
