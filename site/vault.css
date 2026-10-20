@@ -266,3 +266,25 @@ body.menu-open{overflow:hidden}
 
 /* Long pages: let the browser skip work for cells and blocks that are off screen */
 .nb-cell,.nb-md,.code-card,.prose pre{content-visibility:auto;contain-intrinsic-size:auto 160px}
+
+/* GitHub star button with the live count */
+.star-btn{min-height:36px;padding:7px 12px;font-size:.85rem}
+.star-btn .icon{width:16px;height:16px}
+.star-count{display:inline-flex;align-items:center;min-height:18px;padding:0 6px;border-radius:var(--r-xs);background:var(--tag-gray);color:var(--tag-gray-ink);font-size:.72rem;font-weight:600;font-variant-numeric:tabular-nums}
+.star-count[hidden]{display:none}
+.side-link .star-count{margin-left:auto}
+@media(max-width:519px){.topbar .star-btn span:not(.star-count){display:none}.topbar .star-btn{padding:7px 9px}}
+
+/* PDF reader */
+.pdf{margin:0 calc(var(--gutter) * -1);border-top:1px solid var(--border);background:var(--muted)}
+.pdf-bar{position:sticky;top:var(--bar);z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px var(--gutter);border-bottom:1px solid var(--border);background:rgba(247,247,245,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-size:.85rem;color:var(--muted-foreground)}
+.pdf-count{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pdf-zoom{display:flex;align-items:center;gap:2px}
+.pdf-zoom .btn{min-height:32px;font-size:1rem}
+.pdf-zoom .btn[data-zoom="fit"]{font-size:.82rem}
+.pdf-zoom span{min-width:46px;text-align:center;font-variant-numeric:tabular-nums}
+.pdf-pages{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:16px 8px 24px;overflow-x:auto}
+.pdf-page{width:var(--page-w,100%);max-width:none;flex:none;margin:0 auto;background:#fff;box-shadow:var(--shadow-card);border-radius:2px}
+.pdf-page canvas{display:block;width:100%;height:auto;border-radius:2px}
+.pdf-fallback{padding:24px;text-align:center}
+@media(min-width:1024px){.pdf{margin:0;border:1px solid var(--border);border-radius:var(--r-lg);overflow:clip}.pdf-bar{top:46px;border-radius:var(--r-lg) var(--r-lg) 0 0}}

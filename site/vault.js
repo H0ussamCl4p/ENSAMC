@@ -149,3 +149,25 @@ document.addEventListener("pointerover", (e) => {
   if (a) hoverTimer = setTimeout(() => prefetch(a), 65);
 }, { passive: true });
 document.addEventListener("touchstart", (e) => prefetch(e.target.closest("a")), { passive: true });
+
+// GitHub star count, cached an hour so browsing pages does not hit the API (60 calls/hour per visitor).
+function stars() {
+  const slots = document.querySelectorAll("[data-stars]");
+  if (!slots.length) return;
+  const show = (n) => slots.forEach((s) => { s.textContent = n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n); s.hidden = false; });
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem("vault-stars") || "null"); } catch (_) {}
+  if (cached && Date.now() - cached.t < 3600e3) { show(cached.n); return; }
+  if (cached) show(cached.n);
+  fetch("https://api.github.com/repos/H0ussamCl4p/ENSAMC", { headers: { Accept: "application/vnd.github+json" } })
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    .then((d) => {
+      show(d.stargazers_count);
+      try { localStorage.setItem("vault-stars", JSON.stringify({ n: d.stargazers_count, t: Date.now() })); } catch (_) {}
+    })
+    .catch(() => {});
+}
+// After the page has loaded, when the browser is idle: never in the way of the first paint.
+const idle = window.requestIdleCallback || ((f) => setTimeout(f, 200));
+if (document.readyState === "complete") idle(stars);
+else window.addEventListener("load", () => idle(stars), { once: true });

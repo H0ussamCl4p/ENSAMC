@@ -86,7 +86,7 @@ def url_of(src_rel):
         out = stem + ".html"
     elif ext == ".ipynb":
         out = stem + ".html"
-    elif ext.lower() in CODE:
+    elif ext.lower() in CODE or ext.lower() == ".pdf":
         out = name + ".html"
     else:
         out = name
@@ -282,6 +282,7 @@ ICONS = {
     "pdf": '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M8.5 16v-4h1.2a1.2 1.2 0 0 1 0 2.4H8.5"/>',
     "download": '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
     "linkedin": '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/>',
+    "star": '<path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.9z"/>',
     "users": '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/>',
 }
 
@@ -337,7 +338,7 @@ def sidebar(tree, page_url, current_rel):
 {''.join(groups)}
 <div class="sidebar-foot">
 <a class="side-link subtle" href="{contrib}">{icon('users')}<span>Contribute</span></a>
-<a class="side-link subtle" href="{REPO_URL}" rel="noopener">{icon('github')}<span>GitHub</span></a>
+<a class="side-link subtle" href="{REPO_URL}" rel="noopener">{icon('star')}<span>Star on GitHub</span><span class="star-count" data-stars hidden></span></a>
 </div>
 </aside>"""
 
@@ -397,6 +398,7 @@ def layout(tree, page_url, rel, title, body, description="", head_extra=""):
 <nav class="crumb" aria-label="Breadcrumb">{crumbs(page_url, rel, title)}</nav>
 <div class="topbar-right">
 <button class="btn ghost icon-btn" type="button" data-search aria-label="Search">{icon('search')}</button>
+<a class="btn outline star-btn" href="{REPO_URL}" rel="noopener" aria-label="Star Vault on GitHub">{icon('star')}<span>Star</span><span class="star-count" data-stars hidden></span></a>
 <a class="btn soft wide-only" href="{LINKEDIN}" rel="noopener">Ensamien Parrainage</a>
 </div>
 </header>
@@ -528,10 +530,41 @@ def build_file(tree, node):
         html_body = page_head([(lang, "green"), (f"{lines} lines", "gray")], name, "", dl) + f'<div class="code-card">{code_html}</div>'
         add_search(page_url, name, section_of(node.rel), read(src)[:600])
         title = name
+    elif ext == ".pdf":
+        title = name
+        size = os.path.getsize(src)
+        pages = pdf_pages(src)
+        tags = [("PDF", "red")] + ([(f"{pages} pages", "gray")] if pages else []) + [(f"{size / 1048576:.1f} MB", "gray")]
+        actions = (f'<a class="btn soft" href="{esc(name)}" download>{icon("download")}Download</a>'
+                   f'<a class="btn outline" href="{esc(name)}" target="_blank" rel="noopener">Open original</a>')
+        viewer = f"""<div class="pdf" data-pdf="{esc(name)}">
+<div class="pdf-bar"><span class="pdf-count">Loading…</span>
+<div class="pdf-zoom"><button type="button" class="btn ghost icon-btn" data-zoom="-" aria-label="Zoom out">−</button>
+<span data-zoom-level>100%</span>
+<button type="button" class="btn ghost icon-btn" data-zoom="+" aria-label="Zoom in">+</button>
+<button type="button" class="btn ghost" data-zoom="fit">Fit</button></div></div>
+<div class="pdf-pages"></div>
+<p class="pdf-fallback" hidden><a class="btn" href="{esc(name)}">Open the PDF</a></p>
+<noscript><p><a class="btn" href="{esc(name)}">Open the PDF</a></p></noscript>
+</div>"""
+        html_body = page_head(tags, name, "", actions) + viewer
+        head = ('<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>'
+                f'<script type="module" src="{rel_link(page_url, ASSET_PATHS["pdf"])}"></script>')
+        add_search(page_url, name, section_of(node.rel), "PDF " + name.replace("-", " "))
+        write(page_url, layout(tree, page_url, node.rel, title, html_body, head_extra=head))
+        return
     else:
         return
     write(page_url, layout(tree, page_url, os.path.dirname(node.rel) + "/" + name if os.path.dirname(node.rel) else name,
                            title, html_body))
+
+
+def pdf_pages(path):
+    """Page count read from the PDF trailer (/Count of the page tree); 0 if unknown."""
+    with open(path, "rb") as f:
+        data = f.read()
+    counts = [int(c) for c in re.findall(rb"/Count\s+(\d+)", data)]
+    return max(counts) if counts else 0
 
 
 def build_home(tree):
@@ -638,17 +671,19 @@ def build_assets():
     css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
     css = re.sub(r"\s+", " ", css)
     css = re.sub(r"\s*([{};:,>])\s*", r"\1", css).replace(";}", "}")
-    js = read(os.path.join(ASSETS, "vault.js"))
     os.makedirs(os.path.join(OUT, "assets", "fonts"), exist_ok=True)
     # CSS is inlined in every page (no render-blocking request); the script is
     # versioned by its hash so a deploy is never hidden behind a cached copy.
     ASSET_PATHS["css_text"] = css
-    js = re.sub(r"^\s*//.*$", "", js, flags=re.M)
-    js = re.sub(r"\n\s*\n+", "\n", js)
-    h = hashlib.sha1(js.encode()).hexdigest()[:10]
-    ASSET_PATHS["js"] = f"assets/vault.{h}.js"
-    with open(os.path.join(OUT, ASSET_PATHS["js"]), "w", encoding="utf-8") as f:
-        f.write(js)
+    # vault.js runs on every page; pdf.js (the reader) only on PDF pages
+    for key, name in (("js", "vault"), ("pdf", "pdf")):
+        js = read(os.path.join(ASSETS, f"{name}.js"))
+        js = re.sub(r"^\s*//.*$", "", js, flags=re.M)
+        js = re.sub(r"\n\s*\n+", "\n", js)
+        h = hashlib.sha1(js.encode()).hexdigest()[:10]
+        ASSET_PATHS[key] = f"assets/{name}.{h}.js"
+        with open(os.path.join(OUT, ASSET_PATHS[key]), "w", encoding="utf-8") as f:
+            f.write(js)
     shutil.copy(os.path.join(ASSETS, "fonts", "inter.woff2"), os.path.join(OUT, "assets", "fonts", "inter.woff2"))
     shutil.copy(os.path.join(ASSETS, "fonts", "OFL-Inter.txt"), os.path.join(OUT, "assets", "fonts", "OFL-Inter.txt"))
     shutil.copy(os.path.join(ASSETS, "CNAME"), os.path.join(OUT, "CNAME"))
