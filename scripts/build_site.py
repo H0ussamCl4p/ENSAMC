@@ -17,6 +17,7 @@ import os
 import re
 import shutil
 import sys
+import urllib.request
 from datetime import date
 
 import markdown
@@ -34,6 +35,22 @@ SITE_URL = "https://vault.hclap.tech"
 REPO_URL = "https://github.com/H0ussamCl4p/ENSAMC"
 LINKEDIN = "https://www.linkedin.com/company/ensamien-parrainage/posts/"
 FLOW_URL = "https://flow.hclap.tech/"
+ORIENTATION = "CI/orientation-filieres.html"
+
+# Home page boxes: what each cycle and level is, and the programs that have no content yet.
+CYCLES = {"API": ("Integrated prep cycle", "Two years of prépa before choosing a program."),
+          "CI": ("Engineering cycle", "Three years in one of the seven programs."),
+          "Master": ("Master's", "Master's programs.")}
+LEVELS = {"avant-api1": "Get ready for prépa", "api1": "Prep year 1", "api2": "Prep year 2",
+          "tronc-commun-1a": "All programs, year 1", "cs2c": "Cybersecurity and Cloud Computing"}
+PROGRAMS = [("GSI", "Industrial systems"), ("GSMI", "Mechanical systems"), ("GEM", "Electromechanics"),
+            ("IAGI", "AI and computer engineering"), ("GM2A", "Mechatronics for automotive and aerospace"),
+            ("MSEI", "Smart electrical systems")]
+DRIVES = [("API1", "2026-2027", "1agpbin9asgD10WXHt4Agk_-0C27z8CY-"),
+          ("API2", "2026-2027", "13TV1AZulLeBDfWJQB11-BYGQg9lmQzL9"),
+          ("GSI", "2025-2026", "186BMD4eDyG8JPjyYd6-sNqbF8_W_XPgL"),
+          ("GM2A", "2026-2027", "16gkD6kp0codf8mjscpTy4R54hoFfGbHf"),
+          ("MSEI", "2025-2026", "1-APZVKuBcKRbjmePPZj6OHiQq5TOmYAY")]
 
 CODE = {".c": "c", ".h": "c", ".py": "python", ".m": "matlab", ".r": "r", ".sql": "sql", ".algo": "text"}
 KIND = {".pdf": ("PDF", "red"), ".png": ("Image", "blue"), ".jpg": ("Image", "blue"), ".txt": ("Data", "gray")}
@@ -153,9 +170,9 @@ class Node:
 def scan(rel=""):
     node = Node(rel, True)
     full = os.path.join(ROOT, rel)
-    # folders first; "avant-*" (what comes before a level) sorts before the levels
+    # folders first; what comes before the levels ("avant-api1", the common first year) sorts first
     entries = sorted(os.listdir(full), key=lambda n: (not os.path.isdir(os.path.join(full, n)),
-                                                      not n.startswith("avant-"), n.lower()))
+                                                      not n.startswith(("avant-", "tronc-commun")), n.lower()))
     for name in entries:
         if name in IGNORE or name.startswith("."):
             continue
@@ -309,29 +326,18 @@ def kind_of(node):
 
 
 def sidebar(tree, page_url, current_rel):
-    def branch(node, depth):
-        items = []
-        for c in node.children:
-            if not c.is_dir:
-                continue
-            open_ = current_rel == c.rel or current_rel.startswith(c.rel + "/")
-            # the folder itself, or the folder holding the file being read
-            here = current_rel if os.path.isdir(os.path.join(ROOT, current_rel)) else os.path.dirname(current_rel)
-            active = " active" if here == c.rel else ""
-            link = f'<a class="side-link{active}" href="{rel_link(page_url, c.url)}">{esc(c.title)}</a>'
-            subdirs = [x for x in c.children if x.is_dir]
-            if subdirs and (open_ or depth < 1):
-                items.append(f'<li>{link}<ul>{branch(c, depth + 1)}</ul></li>')
-            else:
-                items.append(f"<li>{link}</li>")
-        return "".join(items)
-
     home_active = " active" if page_url == "index.html" else ""
-    groups = []
+    links = []
     for sec in tree.children:
         if not sec.is_dir:
             continue
-        groups.append(f'<div class="side-label">{esc(sec.title)}</div><ul class="side-tree">{branch(sec, 0)}</ul>')
+        active = " active" if current_rel == sec.rel or current_rel.startswith(sec.rel + "/") else ""
+        links.append(f'<a class="side-link{active}" href="{rel_link(page_url, sec.url)}">{icon("folder")}'
+                     f'<span>{esc(sec.title)}</span><small>{esc(CYCLES[sec.rel][0])}</small></a>')
+    guide = " active" if page_url == ORIENTATION else ""
+    groups = [f'<div class="side-label">Browse</div>{"".join(links)}',
+              f'<div class="side-label">Guides</div><a class="side-link{guide}" href="{rel_link(page_url, ORIENTATION)}">'
+              f'{icon("doc")}<span>Choosing a program</span></a>']
     contrib = rel_link(page_url, "CONTRIBUTING.html")
     return f"""<aside class="sidebar" id="sidebar" aria-label="Navigation">
 <a class="brand" href="{rel_link(page_url, 'index.html')}">{BRAND_INNER}</a>
@@ -341,7 +347,7 @@ def sidebar(tree, page_url, current_rel):
 {''.join(groups)}
 <div class="sidebar-foot">
 <a class="side-link subtle" href="{contrib}">{icon('users')}<span>Contribute</span></a>
-<a class="side-link subtle star-btn" href="{REPO_URL}" target="_blank" rel="noopener">{icon('star')}<span>Star on GitHub</span><span class="star-count" data-stars hidden></span></a>
+<a class="side-link subtle star-btn" href="{REPO_URL}" target="_blank" rel="noopener">{icon('star')}<span>Star on GitHub</span>{star_slot()}</a>
 </div>
 </aside>"""
 
@@ -353,6 +359,30 @@ FAVICON = ("<link rel=\"icon\" href=\"data:image/svg+xml,%3Csvg xmlns='http://ww
 
 BRAND_INNER = ('<span class="brand-mark" aria-hidden="true">V</span><span class="brand-name">'
                '<strong class="brand-word">Vault</strong><span class="brand-by">By ENSAMIENParrainage</span></span>')
+
+
+STARS = None
+
+
+def fetch_stars():
+    """Star count at build time, so it shows before any script runs. The page refreshes it later."""
+    global STARS
+    try:
+        req = urllib.request.Request(REPO_URL.replace("github.com", "api.github.com/repos"),
+                                     headers={"Accept": "application/vnd.github+json", "User-Agent": "vault-build"})
+        token = os.environ.get("GITHUB_TOKEN")
+        if token:
+            req.add_header("Authorization", f"Bearer {token}")
+        with urllib.request.urlopen(req, timeout=8) as r:
+            STARS = json.load(r)["stargazers_count"]
+    except Exception:
+        STARS = None
+
+
+def star_slot():
+    if STARS is None:
+        return '<span class="star-count" data-stars hidden></span>'
+    return f'<span class="star-count" data-stars>{STARS}</span>'
 
 
 def crumbs(page_url, rel, title):
@@ -401,7 +431,7 @@ def layout(tree, page_url, rel, title, body, description="", head_extra=""):
 <nav class="crumb" aria-label="Breadcrumb">{crumbs(page_url, rel, title)}</nav>
 <div class="topbar-right">
 <button class="btn ghost icon-btn" type="button" data-search aria-label="Search">{icon('search')}</button>
-<a class="btn outline star-btn" href="{REPO_URL}" target="_blank" rel="noopener" aria-label="Star Vault on GitHub">{icon('star')}<span>Star</span><span class="star-count" data-stars hidden></span></a>
+<a class="btn star-btn" href="{REPO_URL}" target="_blank" rel="noopener" aria-label="Star Vault on GitHub">{icon('star')}<span>Star</span>{star_slot()}</a>
 <a class="btn soft wide-only" href="{LINKEDIN}" rel="noopener">Ensamien Parrainage</a>
 </div>
 </header>
@@ -438,14 +468,10 @@ def page_head(eyebrow_tags, title, sub="", actions=""):
 def listing(node, page_url):
     rows = []
     for c in node.children:
-        if c.is_dir:
-            n = sum(1 for x in all_nodes(c) if not x.is_dir)
-            meta = f"{n} file{'s' if n != 1 else ''}"
-        else:
-            if os.path.basename(c.rel).lower() == "readme.md":
-                continue
-            size = os.path.getsize(os.path.join(ROOT, c.rel))
-            meta = f"{size / 1024:.0f} KB" if size >= 1024 else f"{size} B"
+        if c.is_dir or os.path.basename(c.rel).lower() == "readme.md":
+            continue
+        size = os.path.getsize(os.path.join(ROOT, c.rel))
+        meta = f"{size / 1024:.0f} KB" if size >= 1024 else f"{size} B"
         label, color, ic = kind_of(c)
         name = os.path.basename(c.rel)
         shown = c.title if c.is_dir else name
@@ -454,6 +480,58 @@ def listing(node, page_url):
     if not rows:
         return ""
     return f'<section class="list"><div class="list-head"><span>Name</span><span>Type</span><span>Size</span></div>{"".join(rows)}</section>'
+
+
+def file_count(node):
+    return sum(1 for x in all_nodes(node) if not x.is_dir)
+
+
+def plural(n, word="file"):
+    return f"{n} {word}{'s' if n != 1 else ''}"
+
+
+def mod_link(node, page_url):
+    note = '<span class="tag">no longer taught</span>' if node.rel.endswith("matlab") else ""
+    return (f'<li><a href="{rel_link(page_url, node.url)}">{esc(node.title)}{note}'
+            f'<span class="n">{file_count(node)}</span></a></li>')
+
+
+def level_box(level, page_url):
+    """One box per level or program, with its modules inside. Semesters (s1, s2) become small groups."""
+    items = []
+    for c in level.children:
+        if not c.is_dir:
+            continue
+        if re.fullmatch(r"s\d", os.path.basename(c.rel)):
+            items.append(f'<li class="box-group">{esc(c.title)}</li>')
+            items += [mod_link(x, page_url) for x in c.children if x.is_dir]
+        else:
+            items.append(mod_link(c, page_url))
+    sub_title = LEVELS.get(os.path.basename(level.rel), level.title)
+    return (f'<section class="box"><a class="box-head" href="{rel_link(page_url, level.url)}">'
+            f'<span class="tag purple">{esc(level.title)}</span><b>{esc(sub_title)}</b>'
+            f'<small>{plural(file_count(level))}</small></a><ul class="box-mods">{"".join(items)}</ul></section>')
+
+
+def empty_box(code, name):
+    drive = next((i for n, _, i in DRIVES if n == code), None)
+    action = (f'<a href="https://drive.google.com/drive/folders/{drive}?usp=drive_link" rel="noopener">{icon("drive")}Shared drive</a>'
+              if drive else "<span>Coming soon</span>")
+    return (f'<section class="box empty"><div class="box-head"><span class="tag">{esc(code)}</span><b>{esc(name)}</b>'
+            f'<small>Nothing in Vault yet</small></div><div class="box-empty">{action}</div></section>')
+
+
+def folder_boxes(node, page_url):
+    subs = [c for c in node.children if c.is_dir]
+    if not subs:
+        return ""
+    cards = []
+    for c in subs:
+        slug = os.path.basename(c.rel)
+        label = f"{esc(c.title)} · " if slug in LEVELS else ""
+        cards.append(f'<a class="mod" href="{rel_link(page_url, c.url)}"><span class="tag purple">Folder</span>'
+                     f'<b>{esc(LEVELS.get(slug, c.title))}</b><small>{label}{plural(file_count(c))}</small></a>')
+    return f'<div class="mods">{"".join(cards)}</div>'
 
 
 # ----------------------------------------------------------------------------- pages
@@ -494,7 +572,9 @@ def build_dir(tree, node):
     n_files = sum(1 for x in all_nodes(node) if not x.is_dir)
     head = page_head([("Folder", "gray"), (f"{n_files} files", "purple")], title)
     lst = listing(node, page_url)
-    body = head + intro + (f'<h2 class="list-title">Files</h2>{lst}' if lst else "")
+    boxes = folder_boxes(node, page_url)
+    body = (head + intro + (f'<h2 class="list-title">Folders</h2>{boxes}' if boxes else "") +
+            (f'<h2 class="list-title">Files</h2>{lst}' if lst else ""))
     write(page_url, layout(tree, page_url, node.rel, title, body))
 
 
@@ -572,24 +652,6 @@ def pdf_pages(path):
 
 def build_home(tree):
     page_url = "index.html"
-    modules = [
-        ("Before API1", "Maths: from high school to prépa", "API/avant-api1"),
-        ("API1", "Algorithms", "API/api1/algorithmique"),
-        ("API1", "C programming", "API/api1/programmation-c"),
-        ("API2", "Numerical analysis", "API/api2/analyse-numerique"),
-        ("API2", "MATLAB", "API/api2/matlab"),
-        ("CI year 1", "Python pour tous", "CI/tronc-commun-1a/python-pour-tous"),
-        ("CS2C S1", "Data structures and advanced algorithms", "CI/cs2c/s1/structures-donnees-algo-avancee"),
-        ("CS2C S1", "Information systems (SQL)", "CI/cs2c/s1/ingenierie-systemes-information"),
-        ("CS2C S1", "Python programming", "CI/cs2c/s1/programmation-python"),
-        ("CS2C S1", "Inferential statistics (R)", "CI/cs2c/s1/statistique-inferentielle"),
-        ("CS2C S2", "Applied cryptography", "CI/cs2c/s2/cryptographie"),
-    ]
-    drives = [("API1", "2026-2027", "1agpbin9asgD10WXHt4Agk_-0C27z8CY-"),
-              ("API2", "2026-2027", "13TV1AZulLeBDfWJQB11-BYGQg9lmQzL9"),
-              ("GSI", "2025-2026", "186BMD4eDyG8JPjyYd6-sNqbF8_W_XPgL"),
-              ("GM2A", "2026-2027", "16gkD6kp0codf8mjscpTy4R54hoFfGbHf"),
-              ("MSEI", "2025-2026", "1-APZVKuBcKRbjmePPZj6OHiQq5TOmYAY")]
     counts = {"files": 0, "notes": 0, "code": 0, "nb": 0}
     for n in all_nodes(tree):
         if n.is_dir or not n.rel.split("/")[0] in SECTIONS:
@@ -600,16 +662,21 @@ def build_home(tree):
         counts["code"] += ext in CODE
         counts["nb"] += ext == ".ipynb"
 
-    def mod_card(level, name, path):
-        node = next(x for x in all_nodes(tree) if x.rel == path)
-        n = sum(1 for x in all_nodes(node) if not x.is_dir)
-        note = ' <span class="tag gray">no longer taught</span>' if path.endswith("matlab") else ""
-        return (f'<a class="mod" href="{rel_link(page_url, node.url)}"><span class="tag purple">{esc(level)}</span>'
-                f'<b>{esc(name)}</b><small>{n} files{note}</small></a>')
-
-    mods = "".join(mod_card(*m) for m in modules)
+    cycles = []
+    for sec in tree.children:
+        name, blurb = CYCLES[sec.rel]
+        boxes = [level_box(c, page_url) for c in sec.children if c.is_dir]
+        if sec.rel == "CI":
+            boxes += [empty_box(code, label) for code, label in PROGRAMS]
+        if not boxes:
+            boxes.append(empty_box("Master", "Master's programs"))
+        guide = (f'<a class="cycle-note" href="{ORIENTATION}">{icon("doc")}<span><b>Finishing API2?</b> '
+                 f'Read the guide to choosing a program.</span></a>' if sec.rel == "CI" else "")
+        cycles.append(f'<div class="cycle" id="cycle-{sec.rel.lower()}"><div class="cycle-head"><h3>{esc(sec.title)}'
+                      f'<span>{esc(name)}</span></h3><a href="{rel_link(page_url, sec.url)}">Open</a></div>'
+                      f'<p class="muted">{esc(blurb)}</p>{guide}<div class="boxes">{"".join(boxes)}</div></div>')
     drv = "".join(f'<a class="mini-link" href="https://drive.google.com/drive/folders/{i}?usp=drive_link" rel="noopener">'
-                  f'{icon("drive")}<span><b>{esc(n)}</b> shared drive</span><span class="tag">{y}</span></a>' for n, y, i in drives)
+                  f'{icon("drive")}<span><b>{esc(n)}</b> shared drive</span><span class="tag">{y}</span></a>' for n, y, i in DRIVES)
     body = f"""
 <section class="home-hero">
 <span class="eyebrow">Ensamien Parrainage</span>
@@ -617,7 +684,8 @@ def build_home(tree):
 <p class="hero-lede">Course notes, exercises, lab work and solutions shared by students, for students. Sorted by cycle, program and module.</p>
 <div class="hero-actions">
 <button class="btn" type="button" data-search>{icon('search')}Search the vault</button>
-<a class="btn soft" href="#modules">Browse modules</a>
+<a class="btn soft" href="#browse">Browse by cycle</a>
+<a class="btn star-btn hero-star" href="{REPO_URL}" target="_blank" rel="noopener">{icon('star')}<span>Star on GitHub</span>{star_slot()}</a>
 </div>
 </section>
 <div class="stats">
@@ -626,9 +694,9 @@ def build_home(tree):
 <div class="stat"><span class="stat-label">Notes and notebooks</span><span class="stat-value num">{counts['notes'] + counts['nb']}</span></div>
 </div>
 <div class="notice-card"><h2>Student project</h2><p>Vault is not an official resource. Solutions are written by students, so double-check them with your teachers.</p></div>
-<h2 class="list-title" id="modules">Modules</h2>
-<div class="mods">{mods}</div>
-<p class="muted">Files are mostly in French, like the courses. The other programs and the master's are empty for now.</p>
+<h2 class="list-title" id="browse">Browse by cycle</h2>
+{"".join(cycles)}
+<p class="muted">Files are mostly in French, like the courses.</p>
 <h2 class="list-title" id="drives">Shared drives</h2>
 <p class="muted">Slides, past exams and scanned notes for the programs not covered here yet.</p>
 <div class="drives">{drv}</div>
@@ -710,6 +778,7 @@ def main():
     shutil.rmtree(OUT, ignore_errors=True)
     os.makedirs(OUT, exist_ok=True)  # a preview server may keep the folder itself open
     build_assets()
+    fetch_stars()
     tree = Node("", True)
     for sec in SECTIONS:
         tree.children.append(scan(sec))

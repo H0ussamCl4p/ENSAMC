@@ -31,7 +31,7 @@ h1,h2,h3{color:var(--foreground);font-weight:700;letter-spacing:-.03em;line-heig
 ::selection{background:var(--primary-soft-strong);color:var(--primary)}
 :focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:var(--r-xs)}
 .muted{color:var(--muted-foreground);font-size:.9rem}
-@media(max-width:419px){.wide-only{display:none}}
+@media(max-width:419px){.wide-only,.btn.wide-only{display:none}}
 .skip{position:absolute;left:-999px;top:8px;z-index:60;padding:8px 12px;border-radius:var(--r-sm);background:var(--primary);color:#fff}
 .skip:focus{left:8px}
 .icon{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
@@ -90,10 +90,7 @@ kbd{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 
 .side-link.subtle{color:var(--muted-foreground)}
 .side-link .icon{color:var(--muted-foreground)}
 .side-link.active .icon{color:var(--primary)}
-.side-tree,.side-tree ul{list-style:none;margin:0;padding:0}
-.side-tree ul{margin-left:12px;padding-left:6px;border-left:1px solid var(--border)}
-.side-tree .side-link{font-weight:400}
-.side-tree .side-link.active{font-weight:500}
+.side-link small{margin-left:auto;color:var(--muted-foreground);font-size:.72rem;font-weight:400;overflow:hidden;text-overflow:ellipsis}
 .side-search{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;margin:2px 0 8px;padding:4px 8px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--background);color:var(--muted-foreground);font:inherit;font-size:.85rem;cursor:pointer;box-shadow:var(--shadow-card)}
 .side-search:hover{border-color:var(--border-strong)}
 .side-search kbd{margin-left:auto}
@@ -264,16 +261,53 @@ body.menu-open{overflow:hidden}
 .hl-code .o{color:#37352f}
 .hl-code .gp{color:#6b6a66}
 
+/* Home: one block per cycle, one box per level or program, modules inside */
+.cycle{margin:8px 0 34px}
+.cycle-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.cycle-head h3{margin:0;font-size:1.2rem;letter-spacing:-.03em}
+.cycle-head h3 span{margin-left:8px;color:var(--muted-foreground);font-size:.92rem;font-weight:500;letter-spacing:-.01em}
+.cycle-head a{flex:none;color:var(--primary);font-size:.88rem;font-weight:500;text-decoration:none}
+.cycle-head a:hover{text-decoration:underline}
+.cycle>.muted{margin:4px 0 14px}
+.cycle-note{display:flex;align-items:center;gap:10px;margin:0 0 12px;padding:10px 14px;border-radius:var(--r-md);background:var(--primary-soft);color:var(--text);font-size:.9rem;text-decoration:none}
+.cycle-note:hover{background:var(--primary-soft-strong)}
+.cycle-note .icon{color:var(--primary)}
+.cycle-note b{color:var(--foreground)}
+.boxes{display:grid;gap:12px;align-items:start}
+.box{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--background);overflow:hidden}
+.box-head{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px 16px 12px;background:var(--wash);text-decoration:none}
+a.box-head{transition:background .15s var(--ease)}
+a.box-head:hover{background:var(--primary-soft)}
+.box-head b{color:var(--foreground);font-size:1.02rem;font-weight:600;letter-spacing:-.02em;line-height:1.25}
+.box-head small{color:var(--muted-foreground);font-size:.8rem}
+.box-mods{margin:0;padding:6px;list-style:none}
+.box-mods a{display:flex;align-items:center;gap:8px;min-height:38px;padding:6px 10px;border-radius:var(--r-sm);color:var(--text);font-size:.9rem;text-decoration:none}
+.box-mods a:hover{background:var(--hover);color:var(--foreground)}
+.box-mods .n{margin-left:auto;color:var(--muted-foreground);font-size:.75rem;font-variant-numeric:tabular-nums}
+.box-group{padding:10px 10px 2px;color:var(--muted-foreground);font-size:.72rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.box.empty{border-style:dashed}
+.box.empty .box-head{background:transparent}
+.box-empty{padding:0 16px 14px;color:var(--muted-foreground);font-size:.85rem}
+.box-empty a{display:inline-flex;align-items:center;gap:6px;color:var(--primary);font-weight:500;text-decoration:none}
+.box-empty a:hover{text-decoration:underline}
+.box-empty .icon{width:16px;height:16px}
+@media(min-width:600px){.boxes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1100px){.boxes{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
 /* Long pages: let the browser skip work for cells and blocks that are off screen */
 .nb-cell,.nb-md,.code-card,.prose pre{content-visibility:auto;contain-intrinsic-size:auto 160px}
 
 /* GitHub star button with the live count */
-.btn.star-btn{min-height:36px;padding:7px 12px;font-size:.85rem}
-.btn.star-btn .icon{width:16px;height:16px}
-.star-count{display:inline-flex;align-items:center;min-height:18px;padding:0 6px;border-radius:var(--r-xs);background:var(--tag-gray);color:var(--tag-gray-ink);font-size:.72rem;font-weight:600;font-variant-numeric:tabular-nums}
+/* Yellow so it stands out from the purple buttons; the count is in the page from the build. */
+.btn.star-btn{min-height:36px;padding:7px 12px;border-color:#ecd28f;background:var(--tag-yellow);color:var(--tag-yellow-ink);font-size:.85rem;font-weight:600}
+.btn.star-btn:hover{background:#fbe2a9}
+.btn.star-btn .icon{width:16px;height:16px;fill:#e3a008;stroke:#b7791f}
+.star-count{display:inline-flex;align-items:center;min-height:20px;padding:0 7px;border-radius:var(--r-pill);background:#fff;color:var(--tag-yellow-ink);font-size:.75rem;font-weight:700;font-variant-numeric:tabular-nums}
 .star-count[hidden]{display:none}
-.side-link .star-count{margin-left:auto}
-@media(max-width:519px){.topbar .star-btn span:not(.star-count){display:none}.topbar .star-btn{padding:7px 9px}}
+.side-link.star-btn .icon{fill:#e3a008;stroke:#b7791f}
+.side-link .star-count{margin-left:auto;background:var(--tag-yellow)}
+.btn.hero-star{min-height:var(--tap);font-size:.95rem}
+@media(max-width:379px){.topbar .star-btn span:not(.star-count){display:none}.topbar .star-btn{padding:7px 9px}}
 
 /* PDF reader */
 .pdf{margin:0 calc(var(--gutter) * -1);border-top:1px solid var(--border);background:var(--muted)}

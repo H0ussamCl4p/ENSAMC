@@ -127,8 +127,6 @@ document.addEventListener("keydown", (e) => {
   } else if (e.key === "Escape") closeMenu();
 });
 
-// Keep the current page visible in a long sidebar.
-document.querySelector(".sidebar .side-tree .active")?.scrollIntoView({ block: "center" });
 
 // Prefetch a page when the pointer rests on its link, so the click feels instant.
 const prefetched = new Set();
