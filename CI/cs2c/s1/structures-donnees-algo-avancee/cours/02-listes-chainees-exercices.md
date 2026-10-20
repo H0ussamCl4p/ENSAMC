@@ -7,62 +7,71 @@ tags: [dsa, cs2c]
 
 # Listes chaînées : exercices
 
-## Exercice 1 : 
+## Exercice 1 : une liste de trois nœuds à la main
 
-```C
+Créer trois nœuds `(10, "A")`, `(20, "B")`, `(30, "C")`, les relier, afficher la liste puis libérer la mémoire.
+
+```
+tete --> (10, "A") --> (20, "B") --> (30, "C") --> NULL
+```
+
+```c
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
- struct Node{
-
+struct Node {
     int n;
     char ch[10];
+    struct Node *next;
+};
 
-    struct Node* next;
- };
+int main(void) {
+    struct Node *n1 = malloc(sizeof(struct Node));
+    struct Node *n2 = malloc(sizeof(struct Node));
+    struct Node *n3 = malloc(sizeof(struct Node));
+    if (n1 == NULL || n2 == NULL || n3 == NULL) return 1;
 
-int main()
-{
-    struct Node *n1= (struct Node *)malloc(sizeof(struct Node));
-    struct Node *n2= (struct Node *)malloc(sizeof(struct Node));
-    struct Node *n3= (struct Node *)malloc(sizeof(struct Node));
+    n1->n = 10;
+    strcpy(n1->ch, "A");
+    n2->n = 20;
+    strcpy(n2->ch, "B");
+    n3->n = 30;
+    strcpy(n3->ch, "C");
 
-    n1-> n=10;
-    strcpy(n1->ch,"A");
+    n1->next = n2;
+    n2->next = n3;
+    n3->next = NULL;
 
-    n2-> n=20;
-    strcpy(n2->ch,"B");
-
-    n3-> n=30;
-    strcpy(n3->ch,"C");
-
-    n1->next=n2;
-    n2->next=n3;
-    n3->next=NULL;
-
-    struct Node *count=n1;
-
-    while(count!=NULL){
-        printf("(%d , \"%s\")\n",count->n,count->ch);
-        count=count->next;
-    }
+    for (struct Node *p = n1; p != NULL; p = p->next)
+        printf("(%d, \"%s\")\n", p->n, p->ch);
 
     free(n1);
     free(n2);
     free(n3);
-
     return 0;
-
 }
 ```
 
-Remarque : 
-```C
-    (*n1).n=10;
-    strcpy((*n1).ch,"A");
+Sortie :
 
-    n1->n=10;
-    strcpy(n1->ch,"A");
+```
+(10, "A")
+(20, "B")
+(30, "C")
 ```
 
-Les deux écritures sont équivalentes.
+## Remarque : point ou flèche
+
+Ces deux écritures sont équivalentes :
+
+```c
+(*n1).n = 10;
+n1->n = 10;
+```
+
+`n1->n` veut dire « le champ `n` de la struct pointée par `n1` ». Les parenthèses de la première forme sont obligatoires, car `.` est prioritaire sur `*`.
+
+## La suite
+
+Les exercices complets (saisie au clavier, insertion, suppression, affichage à l'envers) sont dans [exercices/](../exercices/). Ensuite : [Piles (LIFO)](03-piles-lifo.md).
