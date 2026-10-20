@@ -36,14 +36,12 @@ REPO_URL = "https://github.com/H0ussamCl4p/ENSAMC"
 LINKEDIN = "https://www.linkedin.com/company/ensamien-parrainage/posts/"
 FLOW_URL = "https://flow.hclap.tech/"
 ORIENTATION = "CI/orientation-filieres.html"
+DRIVES_PAGE = "drives.html"
 
-# Home page boxes: what each cycle and level is, and the programs that have no content yet.
+# Sidebar labels for the cycles, and the names shown on the level boxes of folder pages.
 CYCLES = {"API": "Integrated prep cycle", "CI": "Engineering cycle", "Master": "Master's"}
 LEVELS = {"avant-api1": "Get ready for prépa", "api1": "Prep year 1", "api2": "Prep year 2",
           "tronc-commun-1a": "All programs, year 1", "cs2c": "Cybersecurity and Cloud Computing"}
-PROGRAMS = [("GSI", "Industrial systems"), ("GSMI", "Mechanical systems"), ("GEM", "Electromechanics"),
-            ("IAGI", "AI and computer engineering"), ("GM2A", "Mechatronics for automotive and aerospace"),
-            ("MSEI", "Smart electrical systems")]
 DRIVES = [("API1", "2026-2027", "1agpbin9asgD10WXHt4Agk_-0C27z8CY-"),
           ("API2", "2026-2027", "13TV1AZulLeBDfWJQB11-BYGQg9lmQzL9"),
           ("GSI", "2025-2026", "186BMD4eDyG8JPjyYd6-sNqbF8_W_XPgL"),
@@ -341,7 +339,7 @@ def sidebar(tree, page_url, current_rel):
 <a class="brand" href="{rel_link(page_url, 'index.html')}">{BRAND_INNER}</a>
 <button class="side-search" type="button" data-search>{icon('search')}<span>Search</span><kbd>Ctrl K</kbd></button>
 <a class="side-link{home_active}" href="{rel_link(page_url, 'index.html')}">{icon('home')}<span>Home</span></a>
-<a class="side-link" href="{rel_link(page_url, 'index.html')}#drives">{icon('drive')}<span>Shared drives</span></a>
+<a class="side-link{' active' if page_url == DRIVES_PAGE else ''}" href="{rel_link(page_url, DRIVES_PAGE)}">{icon('drive')}<span>Shared drives</span></a>
 {''.join(groups)}
 <div class="sidebar-foot">
 <a class="side-link subtle" href="{contrib}">{icon('users')}<span>Contribute</span></a>
@@ -442,7 +440,7 @@ def layout(tree, page_url, rel, title, body, description="", head_extra=""):
 <a class="tab{' active' if page_url == 'index.html' else ''}" href="{root}index.html">{icon('home')}<span>Home</span></a>
 <button class="tab{'' if page_url == 'index.html' else ' active'}" type="button" data-menu>{icon('folder')}<span>Browse</span></button>
 <button class="tab" type="button" data-search>{icon('search')}<span>Search</span></button>
-<a class="tab" href="{root}index.html#drives">{icon('drive')}<span>Drives</span></a>
+<a class="tab{' active' if page_url == DRIVES_PAGE else ''}" href="{root}{DRIVES_PAGE}">{icon('drive')}<span>Drives</span></a>
 </nav>
 <div class="scrim" data-close hidden></div>
 <dialog class="search" id="search" aria-label="Search">
@@ -486,37 +484,6 @@ def file_count(node):
 
 def plural(n, word="file"):
     return f"{n} {word}{'s' if n != 1 else ''}"
-
-
-def mod_link(node, page_url):
-    note = '<span class="tag">no longer taught</span>' if node.rel.endswith("matlab") else ""
-    return (f'<li><a href="{rel_link(page_url, node.url)}">{esc(node.title)}{note}'
-            f'<span class="n">{file_count(node)}</span></a></li>')
-
-
-def level_box(level, page_url):
-    """One box per level or program, with its modules inside. Semesters (s1, s2) become small groups."""
-    items = []
-    for c in level.children:
-        if not c.is_dir:
-            continue
-        if re.fullmatch(r"s\d", os.path.basename(c.rel)):
-            items.append(f'<li class="box-group">{esc(c.title)}</li>')
-            items += [mod_link(x, page_url) for x in c.children if x.is_dir]
-        else:
-            items.append(mod_link(c, page_url))
-    sub_title = LEVELS.get(os.path.basename(level.rel), level.title)
-    return (f'<section class="box"><a class="box-head" href="{rel_link(page_url, level.url)}">'
-            f'<span class="tag purple">{esc(level.title)}</span><b>{esc(sub_title)}</b>'
-            f'<small>{plural(file_count(level))}</small></a><ul class="box-mods">{"".join(items)}</ul></section>')
-
-
-def empty_box(code, name):
-    drive = next((i for n, _, i in DRIVES if n == code), None)
-    action = (f'<a href="https://drive.google.com/drive/folders/{drive}?usp=drive_link" rel="noopener">{icon("drive")}Shared drive</a>'
-              if drive else "<span>Coming soon</span>")
-    return (f'<section class="box empty"><div class="box-head"><span class="tag">{esc(code)}</span><b>{esc(name)}</b>'
-            f'</div><div class="box-empty">{action}</div></section>')
 
 
 def folder_boxes(node, page_url):
@@ -660,21 +627,6 @@ def build_home(tree):
         counts["code"] += ext in CODE
         counts["nb"] += ext == ".ipynb"
 
-    cycles = []
-    for sec in tree.children:
-        name = CYCLES[sec.rel]
-        boxes = [level_box(c, page_url) for c in sec.children if c.is_dir]
-        if sec.rel == "CI":
-            boxes += [empty_box(code, label) for code, label in PROGRAMS]
-        if not boxes:
-            boxes.append(empty_box("Master", "Master's programs"))
-        guide = (f'<a class="cycle-note" href="{ORIENTATION}">{icon("doc")}<span><b>Choosing a program?</b> Read the guide</span></a>'
-                 if sec.rel == "CI" else "")
-        cycles.append(f'<div class="cycle" id="cycle-{sec.rel.lower()}"><div class="cycle-head"><h3>{esc(sec.title)}'
-                      f'<span>{esc(name)}</span></h3><a href="{rel_link(page_url, sec.url)}">Open</a></div>'
-                      f'{guide}<div class="boxes">{"".join(boxes)}</div></div>')
-    drv = "".join(f'<a class="mini-link" href="https://drive.google.com/drive/folders/{i}?usp=drive_link" rel="noopener">'
-                  f'{icon("drive")}<span><b>{esc(n)}</b></span><span class="tag">{y}</span></a>' for n, y, i in DRIVES)
     body = f"""
 <section class="home-hero">
 <span class="eyebrow">Ensamien Parrainage</span>
@@ -682,7 +634,6 @@ def build_home(tree):
 <p class="hero-lede">Notes, exercises and solutions, by students.</p>
 <div class="hero-actions">
 <button class="btn" type="button" data-search>{icon('search')}Search the vault</button>
-<a class="btn soft" href="#browse">Browse by cycle</a>
 <a class="btn star-btn hero-star" href="{REPO_URL}" target="_blank" rel="noopener">{icon('star')}<span>Star on GitHub</span>{star_slot()}</a>
 </div>
 </section>
@@ -692,10 +643,6 @@ def build_home(tree):
 <div class="stat"><span class="stat-label">Notes</span><span class="stat-value num">{counts['notes'] + counts['nb']}</span></div>
 </div>
 <p class="muted note-line">Student project, not official. Check solutions with your teachers.</p>
-<h2 class="list-title" id="browse">Browse by cycle</h2>
-{"".join(cycles)}
-<h2 class="list-title" id="drives">Shared drives</h2>
-<div class="drives">{drv}</div>
 <div class="card about">
 <h2>Ensamien Parrainage</h2>
 <div class="about-actions">
@@ -705,8 +652,18 @@ def build_home(tree):
 </div>
 </div>
 """
-    add_search(page_url, "Home", "", "Vault course notes exercises solutions Ensamien Parrainage shared drives API1 API2 GSI GM2A MSEI")
+    add_search(page_url, "Home", "", "Vault course notes exercises solutions Ensamien Parrainage")
     write(page_url, layout(tree, page_url, "", "Home", body))
+
+
+def build_drives(tree):
+    page_url = DRIVES_PAGE
+    links = "".join(f'<a class="mini-link" href="https://drive.google.com/drive/folders/{i}?usp=drive_link" rel="noopener">'
+                    f'{icon("drive")}<span><b>{esc(n)}</b></span><span class="tag">{y}</span></a>' for n, y, i in DRIVES)
+    body = page_head([("Google Drive", "blue")], "Shared drives", "Slides, past exams and scanned notes.") + \
+        f'<div class="drives">{links}</div>'
+    add_search(page_url, "Shared drives", "", "shared drives Google Drive " + " ".join(n for n, _, _ in DRIVES))
+    write(page_url, layout(tree, page_url, "drives", "Shared drives", body))
 
 
 def build_extra(tree):
@@ -785,6 +742,7 @@ def main():
         else:
             build_file(tree, node)
     build_home(tree)
+    build_drives(tree)
     build_extra(tree)
     build_404(tree)
     build_sitemap()
